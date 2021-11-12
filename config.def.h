@@ -5,7 +5,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "IBM Plex Mono:pixelsize=20:antialias=true:autohint=true";
+static char *font = "Cascadia Mono:pixelsize=24:antialias=true:autohint=true";
 static int borderpx = 5;
 
 /*
@@ -96,7 +96,7 @@ unsigned int tabspaces = 8;
 /* Terminal colors (16 first used in escape sequence) */
 static const char *colorname[] = {
 	/* 8 normal colors */
-	"#1e2127",
+	"#111111",
 	"#e06c75",
 	"#98c379",
 	"#d19a66",
