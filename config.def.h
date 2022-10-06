@@ -5,7 +5,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Cascadia Code:pixelsize=24:antialias=true:autohint=true";
+static char *font = "Hermit:pixelsize=24:antialias=true:autohint=true";
 static int borderpx = 5;
 
 /*
@@ -123,7 +123,7 @@ static const char *colorname[] = {
 	"#cccccc",
 	"#555555",
 	"gray90", /* default foreground colour */
-	//"black", /* default background colour */
+    //"black", /* default background colour */
     "#181a1f",
 };
 
