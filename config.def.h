@@ -5,7 +5,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Hermit:pixelsize=24:antialias=true:autohint=true";
+static char *font = "Cascadia Code:pixelsize=24:antialias=true";
 static int borderpx = 5;
 
 /*
