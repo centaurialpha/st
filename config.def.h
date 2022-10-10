@@ -5,7 +5,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Cascadia Code:pixelsize=24:antialias=true";
+static char *font = "IBM Plex Mono Medm:pixelsize=24:antialias=true";
 static int borderpx = 5;
 
 /*
@@ -121,7 +121,7 @@ static const char *colorname[] = {
 	"#ff7043",
 	"#f8f8f2",
 	"#cccccc",
-	"#555555",
+	"#181a1f",
 	"gray90", /* default foreground colour */
     //"black", /* default background colour */
     "#181a1f",
