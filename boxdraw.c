@@ -31,6 +31,8 @@ isboxdraw(Rune u)
 {
 	Rune block = u & ~0xff;
 	return (boxdraw && block == 0x2500 && boxdata[(uint8_t)u]) ||
+	       (boxdraw && block == 0x1fb00 && (uint8_t)u < LEN(boxdata_1fb) &&
+	        boxdata_1fb[(uint8_t)u]) ||
 	       (boxdraw_braille && block == 0x2800);
 }
 
@@ -40,6 +42,8 @@ boxdrawindex(const Glyph *g)
 {
 	if (boxdraw_braille && (g->u & ~0xff) == 0x2800)
 		return BRL | (uint8_t)g->u;
+	if ((g->u & ~0xff) == 0x1fb00)
+		return (uint8_t)g->u < LEN(boxdata_1fb) ? boxdata_1fb[(uint8_t)g->u] : 0;
 	if (boxdraw_bold && (g->mode & ATTR_BOLD))
 		return BDB | boxdata[(uint8_t)g->u];
 	return boxdata[(uint8_t)g->u];
@@ -106,6 +110,48 @@ drawbox(int x, int y, int w, int h, XftColor *fg, XftColor *bg, ushort bd)
 		XftColorAllocValue(xdpy, xvis, xcmap, &xrc, &xfc);
 		XftDrawRect(xd, &xfc, x, y, w, h);
 		XftColorFree(xdpy, xvis, xcmap, &xfc);
+
+	} else if (cat == BSX) {
+		/* sextants: 2 columns x 3 rows, data bit0..5 = positions 1..6 */
+		int cb[3] = { 0, DIV(w, 2), w };
+		int rb[4] = { 0, DIV(h, 3), DIV(2 * h, 3), h };
+		int i;
+		for (i = 0; i < 6; i++) {
+			int col = i % 2, row = i / 2;
+			if (bd & (1 << i))
+				XftDrawRect(xd, fg, x + cb[col], y + rb[row],
+				            cb[col + 1] - cb[col], rb[row + 1] - rb[row]);
+		}
+
+	} else if (cat == BVS || cat == BHS) {
+		/* single (non-cumulative) eighth-column or eighth-row stripes */
+		int eb[9], i;
+		for (i = 0; i <= 8; i++)
+			eb[i] = DIV(i * (cat == BVS ? w : h), 8);
+		for (i = 0; i < 8; i++) {
+			if (!((uint8_t)bd & (1 << i)))
+				continue;
+			if (cat == BVS)
+				XftDrawRect(xd, fg, x + eb[i], y, eb[i + 1] - eb[i], h);
+			else
+				XftDrawRect(xd, fg, x, y + eb[i], w, eb[i + 1] - eb[i]);
+		}
+
+	} else if (cat == BES) {
+		/* mixed-axis eighth edge stripes: left/right column, top/bottom row */
+		int cb[9], rb[9], i;
+		for (i = 0; i <= 8; i++) {
+			cb[i] = DIV(i * w, 8);
+			rb[i] = DIV(i * h, 8);
+		}
+		if (bd & SL)
+			XftDrawRect(xd, fg, x, y, cb[1], h);
+		if (bd & SR)
+			XftDrawRect(xd, fg, x + cb[7], y, w - cb[7], h);
+		if (bd & ST)
+			XftDrawRect(xd, fg, x, y, w, rb[1]);
+		if (bd & SB)
+			XftDrawRect(xd, fg, x, y + rb[7], w, h - rb[7]);
 
 	} else if (cat == BRL) {
 		/* braille, each data bit corresponds to one dot at 2x4 grid */

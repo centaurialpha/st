@@ -26,6 +26,10 @@
 #define BBR (4<<10)  /* Box Block Right X/8 */
 #define BBQ (5<<10)  /* Box Block Quadrants */
 #define BRL (6<<10)  /* Box Braille (data is lower byte of U28XX) */
+#define BSX (7<<10)  /* Box Sextant (6-bit mask) */
+#define BVS (8<<10)  /* Box Vertical eighth-column Stripe (8-bit mask) */
+#define BHS (9<<10)  /* Box Horizontal eighth-row Stripe (8-bit mask) */
+#define BES (10<<10) /* Box Edge Stripes (SL/SR/ST/SB mask) */
 
 #define BBS (1<<14)  /* Box Block Shades */
 #define BDB (1<<15)  /* Box Draw is Bold */
@@ -58,6 +62,12 @@
 #define TR (1<<1)
 #define BL (1<<2)
 #define BR (1<<3)
+
+/* (BES) Eighth Edge Stripes Top/Bottom x Left/Right */
+#define SL (1<<0)
+#define SR (1<<1)
+#define ST (1<<2)
+#define SB (1<<3)
 
 /* Data for U+2500 - U+259F except dashes/diagonals */
 static const unsigned short boxdata[256] = {
@@ -211,4 +221,68 @@ static const unsigned short boxdata[256] = {
 
 	/* U+2504 - U+250B, U+254C - U+254F: unsupported (dashes) */
 	/* U+2571 - U+2573: unsupported (diagonals) */
+};
+
+/* Data for U+1FB00 - U+1FB8B (Legacy Computing: sextants, eighths) */
+/* Wedges, shades, diagonals and pictographic symbols (U+1FB3C+, U+1FB8C+)
+ * are unsupported - left to font fallback. */
+static const unsigned short boxdata_1fb[0x8c] = {
+	/* sextants: data is a 6-bit mask, bit0..5 = positions 1..6            */
+	/* (1=UL 2=UR 3=ML 4=MR 5=LL 6=LR, per the Unicode SEXTANT-N name)     */
+	[0x00] = BSX + 0x01, [0x01] = BSX + 0x02, [0x02] = BSX + 0x03,
+	[0x03] = BSX + 0x04, [0x04] = BSX + 0x05, [0x05] = BSX + 0x06,
+	[0x06] = BSX + 0x07, [0x07] = BSX + 0x08, [0x08] = BSX + 0x09,
+	[0x09] = BSX + 0x0a, [0x0a] = BSX + 0x0b, [0x0b] = BSX + 0x0c,
+	[0x0c] = BSX + 0x0d, [0x0d] = BSX + 0x0e, [0x0e] = BSX + 0x0f,
+	[0x0f] = BSX + 0x10, [0x10] = BSX + 0x11, [0x11] = BSX + 0x12,
+	[0x12] = BSX + 0x13, [0x13] = BSX + 0x14, [0x14] = BSX + 0x16,
+	[0x15] = BSX + 0x17, [0x16] = BSX + 0x18, [0x17] = BSX + 0x19,
+	[0x18] = BSX + 0x1a, [0x19] = BSX + 0x1b, [0x1a] = BSX + 0x1c,
+	[0x1b] = BSX + 0x1d, [0x1c] = BSX + 0x1e, [0x1d] = BSX + 0x1f,
+	[0x1e] = BSX + 0x20, [0x1f] = BSX + 0x21, [0x20] = BSX + 0x22,
+	[0x21] = BSX + 0x23, [0x22] = BSX + 0x24, [0x23] = BSX + 0x25,
+	[0x24] = BSX + 0x26, [0x25] = BSX + 0x27, [0x26] = BSX + 0x28,
+	[0x27] = BSX + 0x29, [0x28] = BSX + 0x2b, [0x29] = BSX + 0x2c,
+	[0x2a] = BSX + 0x2d, [0x2b] = BSX + 0x2e, [0x2c] = BSX + 0x2f,
+	[0x2d] = BSX + 0x30, [0x2e] = BSX + 0x31, [0x2f] = BSX + 0x32,
+	[0x30] = BSX + 0x33, [0x31] = BSX + 0x34, [0x32] = BSX + 0x35,
+	[0x33] = BSX + 0x36, [0x34] = BSX + 0x37, [0x35] = BSX + 0x38,
+	[0x36] = BSX + 0x39, [0x37] = BSX + 0x3a, [0x38] = BSX + 0x3b,
+	[0x39] = BSX + 0x3c, [0x3a] = BSX + 0x3d, [0x3b] = BSX + 0x3e,
+
+	/* single eighth-column / eighth-row stripes (not edge-cumulative) */
+	[0x70] = BVS + 0x02, /* vertical eighth stripe, column 2 */
+	[0x71] = BVS + 0x04, /* vertical eighth stripe, column 3 */
+	[0x72] = BVS + 0x08, /* vertical eighth stripe, column 4 */
+	[0x73] = BVS + 0x10, /* vertical eighth stripe, column 5 */
+	[0x74] = BVS + 0x20, /* vertical eighth stripe, column 6 */
+	[0x75] = BVS + 0x40, /* vertical eighth stripe, column 7 */
+	[0x76] = BHS + 0x02, /* horizontal eighth stripe, row 2 */
+	[0x77] = BHS + 0x04, /* horizontal eighth stripe, row 3 */
+	[0x78] = BHS + 0x08, /* horizontal eighth stripe, row 4 */
+	[0x79] = BHS + 0x10, /* horizontal eighth stripe, row 5 */
+	[0x7a] = BHS + 0x20, /* horizontal eighth stripe, row 6 */
+	[0x7b] = BHS + 0x40, /* horizontal eighth stripe, row 7 */
+
+	/* mixed-axis edge stripe pairs */
+	[0x7c] = BES + SL + SB,
+	[0x7d] = BES + SL + ST,
+	[0x7e] = BES + SR + ST,
+	[0x7f] = BES + SR + SB,
+	[0x80] = BES + ST + SB,
+
+	/* horizontal eighth stripe, rows 1/3/5/8 (placed here for codepoint order) */
+	[0x81] = BHS + 0x95,
+
+	/* cumulative eighths, filling gaps left by U+2500's halves/full-eighths */
+	[0x82] = BBU + 2,
+	[0x83] = BBU + 3,
+	[0x84] = BBU + 5,
+	[0x85] = BBU + 6,
+	[0x86] = BBU + 7,
+	[0x87] = BBR + 6,
+	[0x88] = BBR + 5,
+	[0x89] = BBR + 3,
+	[0x8a] = BBR + 2,
+	[0x8b] = BBR + 1,
 };
