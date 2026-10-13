@@ -113,32 +113,32 @@ unsigned int tabspaces = 8;
 /* Terminal colors (16 first used in escape sequence) */
 static const char *colorname[] = {
 	/* 8 normal colors */
-	"black",
-	"red3",
-	"green3",
-	"yellow3",
-	"blue2",
-	"magenta3",
-	"cyan3",
-	"gray90",
+	"#323437",
+	"#ff5d5d",
+	"#8cc85f",
+	"#e5c07b",
+	"#80a0ff",
+	"#cf87e8",
+	"#79dac8",
+	"#c6c6c6",
 
 	/* 8 bright colors */
-	"gray50",
-	"red",
-	"green",
-	"yellow",
-	"#5c5cff",
-	"magenta",
-	"cyan",
-	"white",
+	"#949494",
+	"#ff5189",
+	"#85dc85",
+	"#c6c684",
+	"#74b2ff",
+	"#ae81ff",
+	"#36c692",
+	"#e4e4e4",
 
 	[255] = 0,
 
 	/* more colors can be added after 255 to use with DefaultXX */
 	"#cccccc",
 	"#555555",
-	"gray90", /* default foreground colour */
-	"black", /* default background colour */
+	"#c6c6c6", /* default foreground colour */
+	"#080808", /* default background colour */
 };
 
 
@@ -489,3 +489,39 @@ static char ascii_printable[] =
 	" !\"#$%&'()*+,-./0123456789:;<=>?"
 	"@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_"
 	"`abcdefghijklmnopqrstuvwxyz{|}~";
+
+/* X resources to update */
+static const XResPref resources[] = {
+	/* name                    type     address */
+	{ "st.font",               STRING,  &font },
+	{ "st.color0",             STRING,  &colorname[0] },
+	{ "st.color1",             STRING,  &colorname[1] },
+	{ "st.color2",             STRING,  &colorname[2] },
+	{ "st.color3",             STRING,  &colorname[3] },
+	{ "st.color4",             STRING,  &colorname[4] },
+	{ "st.color5",             STRING,  &colorname[5] },
+	{ "st.color6",             STRING,  &colorname[6] },
+	{ "st.color7",             STRING,  &colorname[7] },
+	{ "st.color8",             STRING,  &colorname[8] },
+	{ "st.color9",             STRING,  &colorname[9] },
+	{ "st.color10",            STRING,  &colorname[10] },
+	{ "st.color11",            STRING,  &colorname[11] },
+	{ "st.color12",            STRING,  &colorname[12] },
+	{ "st.color13",            STRING,  &colorname[13] },
+	{ "st.color14",            STRING,  &colorname[14] },
+	{ "st.color15",            STRING,  &colorname[15] },
+	{ "st.foreground",         STRING,  &colorname[258] },
+	{ "st.background",         STRING,  &colorname[259] },
+	{ "st.cursorColor",        STRING,  &colorname[256] },
+	{ "st.cursorColorReverse", STRING,  &colorname[257] },
+	{ "st.termname",           STRING,  &termname },
+	{ "st.shell",              STRING,  &shell },
+	{ "st.minlatency",         INTEGER, &minlatency },
+	{ "st.maxlatency",         INTEGER, &maxlatency },
+	{ "st.blinktimeout",       INTEGER, &blinktimeout },
+	{ "st.bellvolume",         INTEGER, &bellvolume },
+	{ "st.tabspaces",          INTEGER, &tabspaces },
+	{ "st.borderpx",           INTEGER, &borderpx },
+	{ "st.cwscale",            FLOAT,   &cwscale },
+	{ "st.chscale",            FLOAT,   &chscale },
+};
