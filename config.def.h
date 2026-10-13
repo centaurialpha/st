@@ -157,6 +157,12 @@ unsigned int defaultbg = 259;
 unsigned int defaultcs = 256;
 static unsigned int defaultrcs = 257;
 
+
+/*
+* Minimum contrast ratio (1-21)
+*/
+const float min_contrast_ratio = 2.2f;
+
 /*
  * Default shape of cursor
  * 2: Block ("█")

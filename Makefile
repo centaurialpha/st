@@ -4,7 +4,7 @@
 
 include config.mk
 
-SRC = st.c x.c boxdraw.c
+SRC = st.c x.c boxdraw.c contrast.c
 OBJ = $(SRC:.c=.o)
 
 all: st

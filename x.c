@@ -20,6 +20,7 @@ char *argv0;
 #include "arg.h"
 #include "st.h"
 #include "win.h"
+#include "contrast.h"
 
 /* types used in config.h */
 typedef struct {
@@ -1657,6 +1658,17 @@ xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, i
 		xclear(winx, 0, winx + width, win.vborderpx);
 	if (winy + win.ch >= win.vborderpx + win.th)
 		xclear(winx, winy + win.ch, winx + width, win.h);
+
+	/*
+	 * Adjust colours to enforce a minimum contrast. Using the local truefg/bg
+	 * here to ensure we don't alter the dc.cols table permanently.
+	 */
+	if (fg != &truefg)
+		fg = memcpy(&truefg, fg, sizeof(Color));
+	if (bg != &truebg)
+		bg = memcpy(&truebg, bg, sizeof(Color));
+
+	adjust_color_for_contrast(fg, bg);
 
 	/* Clean up the region we want to draw to. */
 	XftDrawRect(xw.draw, bg, winx, winy, width, win.ch);
