@@ -5,7 +5,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Iosevka Term XBd Ex:pixelsize=18:antialias=true:autohint=true";
+static char *font = "Iosevka Term:weight=semibold:width=125:pixelsize=18:antialias=true:autohint=true";
 /* Spare fonts */
 static char *font2[] = {
 	"Symbols Nerd Font Mono:pixelsize=18:antialias=true:autohint=true",
