@@ -8,7 +8,7 @@
 static char *font = "Iosevka Term:weight=semibold:width=125:pixelsize=18:antialias=true:autohint=true";
 /* Spare fonts */
 static char *font2[] = {
-	"Symbols Nerd Font Mono:pixelsize=18:antialias=true:autohint=true",
+	"Symbols Nerd Font Mono:pixelsize=12:antialias=true:autohint=true",
 };
 
 static int borderpx = 2;

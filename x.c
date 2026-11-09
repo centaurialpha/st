@@ -1139,11 +1139,12 @@ xloadsparefonts(void)
 			die("can't open spare font %s\n", *fp);
 
 		if (defaultfontsize > 0) {
-			sizeshift = usedfontsize - defaultfontsize;
-			if (sizeshift != 0 &&
+			/* scale proportionally so icons keep fitting the cell on zoom */
+			sizeshift = usedfontsize / defaultfontsize;
+			if (sizeshift != 1 &&
 					FcPatternGetDouble(pattern, FC_PIXEL_SIZE, 0, &fontval) ==
 					FcResultMatch) {
-				fontval += sizeshift;
+				fontval *= sizeshift;
 				FcPatternDel(pattern, FC_PIXEL_SIZE);
 				FcPatternDel(pattern, FC_SIZE);
 				FcPatternAddDouble(pattern, FC_PIXEL_SIZE, fontval);
